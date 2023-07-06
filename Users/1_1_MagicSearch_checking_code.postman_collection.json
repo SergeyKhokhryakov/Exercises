@@ -1,0 +1,668 @@
+{
+	"info": {
+		"_postman_id": "41e3b709-f5fb-493e-bd56-78593c237808",
+		"name": "1_1_MagicSearch_checking_code",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_code_230",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Пустой ответ, код 230\", function () {",
+							"    pm.expect(pm.response.code).to.eql(230);",
+							"});",
+							"console.log(pm.response);",
+							"pm.test(\"Общее количество найденных записей = 0\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.eql(0);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\":\"Паустовский\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_231",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найден 1 пользователь, код 231\", function () {",
+							"    pm.expect(pm.response.code).to.eql(231);",
+							"});",
+							"",
+							"pm.test(\"Общее количество найденных записей = 1\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.eql(1);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем случайного пользователя",
+							"pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 11));",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/doregister',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        email: 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru',",
+							"        name: 'Эдуард-'+pm.collectionVariables.get(\"index\"),",
+							"        password: '123'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user-{{index}}@mail.ru\",\n\"partyType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_232",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдено больше 1 пользователя (но без компаний), код 232\", function () {",
+							"    pm.expect(pm.response.code).to.eql(232);",
+							"});",
+							"",
+							"pm.test(\"Общее количество найденных записей больше 1\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.above(1);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Эдуард\",\n\"partyType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_233",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдена 1 компания, код 233\", function () {",
+							"    pm.expect(pm.response.code).to.eql(233);",
+							"});",
+							"",
+							"pm.test(\"Общее количество найденных записей = 1\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.eql(1);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем компанию со случайным наименованием",
+							"pm.collectionVariables.set(\"name_company\", 'Компания-'+pm.variables.replaceIn('{{$randomInt}}'));",
+							"",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/createcompany',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        company_name: pm.collectionVariables.get(\"name_company\"),",
+							"        company_type: 'ООО',",
+							"        company_users: ['user-'+pm.collectionVariables.get(\"index\")+'@mail.ru'],",
+							"        email_owner: 'manager@mail.ru'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"{{name_company}}\",\n\"partyType\": \"COMPANY\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_234",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдено больше 1 компании (но без пользователей), код 234\", function () {",
+							"    pm.expect(pm.response.code).to.eql(234);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Общее количество найденных записей больше 1\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.above(1);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Ромашка\",\n\"partyType\": \"COMPANY\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_235",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдены как пользователи, так и компании, код 235\", function () {",
+							"    pm.expect(pm.response.code).to.eql(235);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Эдуард-{{index}} {{name_company}}\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_455",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"не указан параметр query в запросе, код 455\", function () {",
+							"    pm.expect(pm.response.code).to.eql(455);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"В ответе текст: Не найден обязательный параметр query\", function () {",
+							"    pm.expect(jsonData.message).to.include(\"Не найден обязательный параметр query\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_456",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"длина запроса выше 1000 символов, код 456\", function () {",
+							"    pm.expect(pm.response.code).to.eql(456);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Текст ошибки — “Длина запроса не должна превышать 1000 символов”\", function () {",
+							"    pm.expect(jsonData.message).to.include(\"Длина запроса не должна превышать 1000 символов\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\":\"Значимость этих проблем настолько очевидна, что реализация намеченного плана развития играет важную роль в формировании системы масштабного изменения ряда параметров. Разнообразный и богатый опыт дальнейшее развитие различных форм деятельности способствует повышению актуальности форм воздействия. Значимость этих проблем настолько очевидна, что консультация с профессионалами из IT играет важную роль в формировании дальнейших направлений развития проекта! Практический опыт показывает, что курс на социально-ориентированный 1234567890 1234560\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_457",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан partyType (значение не из доступного списка выбора), код 457\", function () {",
+							"    pm.expect(pm.response.code).to.eql(457);",
+							"});",
+							"",
+							"pm.test(\"Текст ошибки — “Параметр partyType может принимать только значения: ALL,USER, COMPANY”\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Параметр partyType может принимать только значения: ALL,USER, COMPANY\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"partyType\": \"user\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_458",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан параметр taskStatus (не из списка выбора значение), код 458\", function () {",
+							"    pm.expect(pm.response.code).to.eql(458);",
+							"});",
+							"",
+							"pm.test(\"Текст ошибки — “Параметр taskStatus может принимать только значения: ALL, ACTUAL, COMPLETE, FAIL\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Параметр taskStatus может принимать только значения: ALL, ACTUAL, COMPLETE, FAIL\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"taskStatus\": \"all\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_code_459",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан параметр include (не из списка выбора значение), код 459\", function () {",
+							"    pm.expect(pm.response.code).to.eql(459);",
+							"});",
+							"",
+							"pm.test(\"Текст ошибки — “Параметр include может принимать только значения: ALL, USER, COMPANY, TASK, WHY”\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Параметр include может принимать только значения: ALL, USER, COMPANY, TASK, WHY\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"include\": \"all\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "name_company",
+			"value": ""
+		}
+	]
+}

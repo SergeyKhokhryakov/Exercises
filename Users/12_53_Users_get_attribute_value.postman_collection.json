@@ -1,0 +1,63 @@
+{
+	"info": {
+		"_postman_id": "59300be9-7d57-48c4-927f-dbaead83acfe",
+		"name": "12_53_Users_get_attribute_value",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Статус кода - 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"const $ = cheerio.load(pm.response.text());",
+							"const element = $(\"a[href^='https://okiseleva']\");",
+							"const str = element.attr('href');",
+							"pm.test(\"Ссылка на проект правильная\", function () {",
+							"        pm.expect(str).to.eql(\"https://okiseleva.blogspot.com/2017/04/users-soap-rest.html\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{urlUser}}",
+					"host": [
+						"{{urlUser}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

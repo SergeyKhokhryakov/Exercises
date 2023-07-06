@@ -1,0 +1,59 @@
+{
+	"info": {
+		"_postman_id": "815fe18c-3b2d-4cb2-8fe7-9d7418c6ef4b",
+		"name": "6_28_Users_checking_status_230-235",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_file",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Статус верный: \" + data.status_code, function () {",
+							"    pm.response.to.have.status(\"status code \" + data.status_code);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"pm.test(\"Общее количество найденных записей = \" + data.count_prompt, function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.foundCount).to.eql(data.count_prompt);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\":\"{{request}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "79b3f7cd-677b-4efc-9d98-1fcfa8ec8154",
+		"name": "8_36_Море,море,океан",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Fake",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"marian = \"море, море, океан, море, море, яхта, мореморе\";",
+							"array = [];",
+							"var position = 0;",
+							"const see = 'море';",
+							"var index = 0;",
+							"var i = 0;",
+							"while (true) {",
+							"    index = marian.indexOf(see, position);",
+							"    if (index >= 0){",
+							"        array[i] = index;",
+							"        position = index + 1; ",
+							"        i += 1;",
+							"    } else {",
+							"        break;",
+							"    }   ",
+							"}",
+							"console.log(array);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 10))+1;",
+							"console.log(pm.collectionVariables.get(\"index\")); ",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"user-{{index}}@mail.ru\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		}
+	]
+}

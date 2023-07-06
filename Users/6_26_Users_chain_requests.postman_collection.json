@@ -1,0 +1,167 @@
+{
+	"info": {
+		"_postman_id": "826255ba-efb6-45a5-a102-9476dfb01caa",
+		"name": "6_26_Users_chain_requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Create_users_random",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Статус кода - 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем случайного пользователя",
+							"pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 21));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "{{emailName}}{{index}}@mail.ru",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "{{userName}}{{index}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/doregister",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"doregister"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getuser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Статус кода - 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Поле name содержит строку\", function () {",
+							"    pm.expect(jsonData.name).to.eql(pm.collectionVariables.get(\"userName\")+pm.collectionVariables.get(\"index\"));",
+							"});",
+							"pm.test(\"Поле email содержит строку\", function () {",
+							"    pm.expect(jsonData.email).to.eql(pm.collectionVariables.get(\"emailName\")+pm.collectionVariables.get(\"index\")+'@mail.ru');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"{{emailName}}{{index}}@mail.ru\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuser",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuser"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "emailName",
+			"value": "user-",
+			"type": "string"
+		},
+		{
+			"key": "userName",
+			"value": "User26-",
+			"type": "string"
+		}
+	]
+}

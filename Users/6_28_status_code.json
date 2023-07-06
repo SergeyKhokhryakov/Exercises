@@ -1,0 +1,25 @@
+[{
+    "request": "Державин",
+    "count_prompt": 0,
+    "status_code": "230"
+},{
+    "request": "user-2@mail.ru",
+    "count_prompt": 1,
+    "status_code": "231"
+},{
+    "request": "Эдуард",
+    "count_prompt": 2,
+    "status_code": "232"
+},{
+    "request": "Компания-360",
+    "count_prompt": 1,
+    "status_code": "233"
+},{
+    "request": "Ромашка",
+    "count_prompt": 2,
+    "status_code": "234"
+},{
+    "request": "Эдуард-2 Компания-360",
+    "count_prompt": 2,
+    "status_code": "235"
+}]

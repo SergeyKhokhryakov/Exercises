@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "281e4b12-a881-4074-9d51-5d2ad27f030e",
+		"name": "3_7_Users_getuserfull",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Getuserfull_find_user_2_companies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"if (jsonData.type == undefined){",
+							"    console.log(jsonData.companys[1].name);",
+							"} else {",
+							"    console.log(jsonData.message);",
+							"}",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем 3 компании со случайными наименованиями",
+							"countCompanies = 3;",
+							"//var jsonData = pm.response.json();",
+							"var compArr = [];",
+							"",
+							"const  doRegister = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/doregister',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw', ",
+							"    raw: { ",
+							"        email: \"\",",
+							"        name: \"\",",
+							"        password: '123'}",
+							"  }",
+							"};",
+							"",
+							"var  createCompany = {",
+							"    url: 'http://users.bugred.ru/tasks/rest/createcompany',",
+							"    method: 'POST',",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: { ",
+							"            company_name: \"\",",
+							"            company_type: 'ООО',",
+							"            company_users: [],",
+							"            email_owner: 'manager@mail.ru'}",
+							"    }",
+							"};",
+							"",
+							"var  createUser = {",
+							"    url: 'http://users.bugred.ru/tasks/rest/createuser',",
+							"    method: 'POST',",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: { ",
+							"            email: \"\",",
+							"            name: \"\",",
+							"            tasks: [12],",
+							"            companies: []}",
+							"        }",
+							"};",
+							"",
+							"const _dummy = setInterval(() => {}, 10000 );",
+							"function sendRequest(req) {",
+							"    return new Promise((resolve, reject) => {",
+							"        pm.sendRequest(req, function (err,res) {",
+							"            if (err) {",
+							"                console.log(err);",
+							"                return reject(err);",
+							"        }",
+							"        //console.log(res.json());",
+							"        return resolve(res);",
+							"    })",
+							"    });",
+							"}",
+							"",
+							"(async function main() {",
+							"    pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 11));",
+							"    // Создаем случайного пользователя",
+							"    doRegister.body.raw.email = 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru';",
+							"    doRegister.body.raw.name = 'Эдуард-'+pm.collectionVariables.get(\"index\");",
+							"    var result = await sendRequest(doRegister);",
+							"",
+							"    for(var j = 0; j < countCompanies; j++){",
+							"        pm.collectionVariables.set(\"name_company\", 'Компания-'+pm.variables.replaceIn('{{$randomInt}}'));",
+							"        createCompany.body.raw.company_name = pm.collectionVariables.get(\"name_company\");",
+							"        createCompany.body.raw.company_users[0] = 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru';",
+							"        /*",
+							"        console.log(\"Index :\");",
+							"        console.log(pm.collectionVariables.get(\"index\"));",
+							"        console.log(\"postRequest :\");",
+							"        console.log(postRequest);",
+							"        console.log(postRequest.body.raw.company_name);",
+							"        console.log(postRequest.body.raw.company_users);",
+							"        */",
+							"        result = await sendRequest(createCompany);",
+							"        compArr[j] = await result.json().id_company;",
+							"        ",
+							"       // console.log('result' + j + ': ', result.code);",
+							"       // console.log(\"Итерация = \"+j+\" -- \"+pm.collectionVariables.get(\"name_company\") + \" index: \" + pm.collectionVariables.get(\"index\") + \" -- \"+compArr);",
+							"    }",
+							"    // Привязываем к пользователю компании, в которых он работал",
+							"    createUser.body.raw.email = 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru';",
+							"    createUser.body.raw.name = 'Эдуард-'+pm.collectionVariables.get(\"index\");",
+							"    createUser.body.raw.companies = compArr;",
+							"    /*",
+							"    console.log(\"postRequest1 :\");",
+							"    console.log(postRequest1);",
+							"    console.log(postRequest1.body.raw.companies);",
+							"    */",
+							"    pm.sendRequest(createUser, function (err, response) {",
+							"        console.log(err ? err : response.json());",
+							"    });",
+							"    //await sendRequest(createUser);",
+							"    pm.globals.set(\"user_index\", pm.collectionVariables.get(\"index\"));  ",
+							"    clearInterval(_dummy);",
+							"})();",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"user-{{index}}@mail.ru\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Getuserfull_find_user_2_companies_DRAFT",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"/*",
+							"var jsonData = pm.response.json();",
+							"console.log(jsonData.companys[1].name);",
+							"*/",
+							"",
+							"var jsonData = pm.response.json();",
+							"console.log(jsonData);",
+							"if (jsonData.type != undefined && jsonData.type == \"error\"){",
+							"    console.log(jsonData.type);",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем 3 компании со случайными наименованиями",
+							"countCompanies = 3;",
+							"//var jsonData = pm.response.json();",
+							"var compArr = [];",
+							"pm.collectionVariables.set(\"index\", 100);",
+							"var  postRequest = {",
+							"        url: 'http://users.bugred.ru/tasks/rest/createcompany',",
+							"        method: 'POST',",
+							"        body: {",
+							"            mode: 'raw',",
+							"            raw: JSON.stringify({ ",
+							"                company_name: pm.collectionVariables.get(\"name_company\"),",
+							"                company_type: 'ООО',",
+							"                company_users: ['user-'+pm.collectionVariables.get(\"index\")+'@mail.ru'],",
+							"                email_owner: 'email1234@list.ru'})",
+							"        }",
+							"    };",
+							"",
+							"    ",
+							"    console.log(\"postRequest :\");",
+							"    console.log(postRequest);",
+							"    console.log(postRequest.url);",
+							"    console.log(postRequest.body.raw.company_name);",
+							"",
+							"    let postRequestJSON = JSON.parse(JSON.stringify(postRequest)); ",
+							"        console.log(\"postRequestJSON :\");",
+							"        console.log(postRequestJSON);",
+							"        console.log(postRequestJSON.body.raw.company_name);",
+							"    ",
+							"",
+							"    var postR = pm.request;",
+							"    console.log(postR);",
+							"    console.log(postR.method);",
+							"    console.log(postR.body.mode);",
+							"    ",
+							"    ",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"email-{{index}}@mail.ru\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "name_company",
+			"value": ""
+		}
+	]
+}

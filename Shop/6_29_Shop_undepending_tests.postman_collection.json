@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "9ad46a29-ab7f-4e9e-a87c-4626c2b58283",
+		"name": "6_29_Shop_undepending_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Create_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Тело ответа содержит статус \\\"ok\\\"\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"pm.test(\"Id существует\", function () {",
+							"    pm.expect(pm.response).to.have.property('id');",
+							"});",
+							"",
+							"pm.test(\"Параметр \\\"Name\\\" существует и является строкойв\", function () {",
+							"    pm.expect(jsonData.result.name).to.be.an('string');",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"id_coll\", jsonData.result.id);",
+							"pm.collectionVariables.set(\"name_coll\", jsonData.result.name);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Джинсы\",\n    \"section\":\"Брюки\",\n    \"description\":\"Удобная одежда для пастухов коров\",\n    \"color\":\"Черный\",\n    \"size\":48,\n    \"price\":109.45,\n    \"params\":\"dress\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/create/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Checking create_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Id совпадает\", function () {",
+							"    pm.expect(jsonData.result.id).to.eql(pm.collectionVariables.get(\"id_coll\"));",
+							"});",
+							"pm.test(\"Name совпадает\", function () {",
+							"    pm.expect(jsonData.result.name).to.eql(pm.collectionVariables.get(\"name_coll\"));",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{id_coll}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/get/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"get",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Id совпадает\", function () {",
+							"    pm.expect(jsonData.result).to.eql(\"Товар с ID \" + pm.collectionVariables.get(\"id_coll\") + \" успешно удален\");",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{id_coll}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/delete/?id={{id_coll}}",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"delete",
+						""
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "{{id_coll}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Checking delete_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Status error\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"error\");",
+							"});",
+							"pm.test(\"Тело ответа содержит текст\", function () {",
+							"    pm.expect(jsonData.message).to.includes(\"Товар с ID \" + pm.collectionVariables.get(\"id_coll\") + \" не найден\");",
+							"});",
+							"pm.collectionVariables.clear();"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{id_coll}}\n}"
+				},
+				"url": {
+					"raw": "{{urlShop}}/get/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"get",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

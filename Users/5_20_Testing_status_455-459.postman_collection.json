@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "7efe5495-d459-46d7-b582-914f16c7442e",
+		"name": "5_20_Testing status 455-459",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_status_455",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"не указан параметр query в запросе, статус 455\", function () {",
+							"    pm.response.to.have.status(\"status code 455\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_456",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"длина запроса выше 1000 символов, статус 456\", function () {",
+							"    pm.response.to.have.status(\"status code 456\");",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\":\"Значимость этих проблем настолько очевидна, что реализация намеченного плана развития играет важную роль в формировании системы масштабного изменения ряда параметров. Разнообразный и богатый опыт дальнейшее развитие различных форм деятельности способствует повышению актуальности форм воздействия. Значимость этих проблем настолько очевидна, что консультация с профессионалами из IT играет важную роль в формировании дальнейших направлений развития проекта! Практический опыт показывает, что курс на социально-ориентированный 1234567890 1234561\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_457",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан partyType (значение не из доступного списка выбора), статус 457\", function () {",
+							"    pm.response.to.have.status(\"status code 457\");",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"partyType\": \"user\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_458",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан параметр taskStatus (не из списка выбора значение), статус 458\", function () {",
+							"    pm.response.to.have.status(\"status code 458\");",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"taskStatus\": \"all\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_459",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"неправильно задан параметр include (не из списка выбора значение), статус 459\", function () {",
+							"    pm.response.to.have.status(\"status code 459\");",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user@mail.ru\",\n\"include\": \"all\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

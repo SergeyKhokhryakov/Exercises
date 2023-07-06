@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "0cb85b9e-32a8-4211-aa36-64ec0c1addf9",
+		"name": "6_25_Shop_random_price",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Create_item_random_price",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Тело ответа содержит статус \\\"ok\\\"\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"id_coll\", jsonData.result.id);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"pm.collectionVariables.set(\"name_coll\", \"Поло\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name_coll}}\",\n    \"section\":\"Футболки\",\n    \"description\":\"Удобная футболка с коротким рукавом\",\n    \"color\":\"Белый\",\n    \"size\":46,\n    \"price\":{{$randomPrice}},\n    \"params\":\"dress\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/create/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search_Delete_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Id совпадает\", function () {",
+							"    pm.expect(jsonData.result[0].id).to.eql(pm.collectionVariables.get(\"id_coll\"));",
+							"});",
+							"pm.test(\"Name совпадает\", function () {",
+							"    pm.expect(jsonData.result[0].name).to.eql(pm.collectionVariables.get(\"name_coll\"));",
+							"});",
+							"",
+							"var  deleteItem = {",
+							"  url: pm.environment.get(\"urlShop\") + '/delete',",
+							"  method: 'DELETE',",
+							"  body: {",
+							"    mode: 'raw', ",
+							"    raw: { ",
+							"        \"id\": \"\"",
+							"        }",
+							"  }",
+							"};",
+							"",
+							"function sendRequest(req) {",
+							"    return new Promise((resolve, reject) => {",
+							"        pm.sendRequest(req, function (err,res) {",
+							"            if (err) {",
+							"                console.log(err);",
+							"                return reject(err);",
+							"        }",
+							"        //console.log(res.json());",
+							"        return resolve(res);",
+							"    })",
+							"    });",
+							"}",
+							"",
+							"const _dummy = setInterval(() => {}, 10000 );",
+							"",
+							"(async function main() {",
+							"    result = jsonData.result;",
+							"    //console.log(jsonData.result.length);",
+							"    //console.log(result.length);",
+							"    // определяем имя свойства, содержащего id",
+							"    const  nameId = Object.keys(jsonData.result[0])[0];",
+							"",
+							"    for (i = 0; i < result.length; i++){",
+							"        deleteItem.body.raw.id = result[i][nameId];",
+							"        //console.log(i);",
+							"        //console.log(deleteItem.body.raw.id);",
+							"        await sendRequest(deleteItem);",
+							"    }",
+							"    clearInterval(_dummy);",
+							"})();"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"{{name_coll}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/search/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"search",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "name_coll",
+			"value": ""
+		},
+		{
+			"key": "id_coll",
+			"value": ""
+		}
+	]
+}

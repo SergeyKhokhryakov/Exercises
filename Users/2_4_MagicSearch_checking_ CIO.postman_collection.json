@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "ec53d2ad-8a3f-45ed-b9cc-08a7f9dcdf7b",
+		"name": "2_4_MagicSearch_checking_ CIO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_CIO_code_231",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"найден(ы) пользователь(и), коды 231, 232\", function () {",
+							"    //pm.response.to.have.status(231);",
+							"    //console.log(pm.response.code);",
+							"    pm.expect(pm.response.code).to.be.within(231, 232);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"var count = jsonData.foundCount;",
+							"if (count > 1) {",
+							"    var results = jsonData.results;",
+							"    results.forEach(function(value)",
+							"        {",
+							"            if (value.email.includes(\"gendir\")){",
+							"                pm.test(\"Гендиректор есть в БД\", function () {",
+							"                    pm.expect(value.email).to.includes(\"gendir\");",
+							"                });",
+							"                console.log(value.name);",
+							"            }",
+							"        });",
+							"} else {",
+							"    pm.test(\"В БД один пользователь\", function () {",
+							"        pm.expect(count).to.eql(1);",
+							"    });",
+							"    console.log(jsonData.results[0].name);",
+							"}",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем в БД генерального директора",
+							"pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 11));",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/doregister',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        email: 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru',",
+							"        name: 'Лунатиков',",
+							"        password: '123'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Лунатиков\",\n\"partyType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		}
+	]
+}

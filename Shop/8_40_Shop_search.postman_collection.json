@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "6db7a9d3-de06-4e84-9269-87da00c6f88c",
+		"name": "8_40_Shop_search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Search_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Тело ответа содержит статус \\\"ok\\\"\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"pm.collectionVariables.set(\"id\", jsonData.result.id);",
+							"",
+							"var  deleteItem = {",
+							"  url: pm.environment.get(\"urlShop\") + '/delete',",
+							"  method: 'DELETE',",
+							"  body: {",
+							"    mode: 'raw', ",
+							"    raw: { ",
+							"        \"id\": \"\"",
+							"        }",
+							"  }",
+							"};",
+							"",
+							"function sendRequest(req) {",
+							"    return new Promise((resolve, reject) => {",
+							"        pm.sendRequest(req, function (err,res) {",
+							"            if (err) {",
+							"                console.log(err);",
+							"                return reject(err);",
+							"        }",
+							"        //console.log(res.json());",
+							"        return resolve(res);",
+							"    })",
+							"    });",
+							"}",
+							"",
+							"const _dummy = setInterval(() => {}, 10000 );",
+							"",
+							"(async function main() {",
+							"    result = jsonData.result;",
+							"    //console.log(jsonData.result.length);",
+							"    //console.log(result.length);",
+							"",
+							"    // определяем имя свойства, содержащего id",
+							"    // если countItem > 10, то в ответе у свойства, содержащего id, имя - last_id",
+							"    // иначе -  id",
+							"    const nameId = Object.keys(jsonData.result[0])[0];",
+							"",
+							"    for (i = 0; i < result.length; i++){",
+							"        deleteItem.body.raw.id = result[i][nameId];",
+							"        //console.log(i);",
+							"        //console.log(deleteItem.body.raw.id);",
+							"        await sendRequest(deleteItem);",
+							"    }",
+							"    clearInterval(_dummy);",
+							"})();",
+							"",
+							"/* другой вариант",
+							"async function* asyncGenerator() {",
+							"  var i = 0;",
+							"  while (i < result.length) {",
+							"    yield i++;",
+							"  }",
+							"}",
+							"",
+							"(async function() {",
+							"    result = jsonData.result;",
+							"    console.log(jsonData.result.length);",
+							"    console.log(result.length);",
+							"    for await (let num of asyncGenerator()) {",
+							"        deleteItem.body.raw.id = result[num].last_id;",
+							"        await sendRequest(deleteItem);",
+							"        console.log(num);",
+							"    }",
+							"     clearInterval(_dummy);",
+							"})();",
+							"*/"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.clear();",
+							"countItem = 10;",
+							"pm.collectionVariables.set(\"countItem\", countItem);",
+							"var itemArr = [];",
+							"",
+							"var  createItem = {",
+							"  url: pm.environment.get(\"urlShop\") + '/create',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw', ",
+							"    raw: { ",
+							"        \"name\": \"\",",
+							"        \"section\": \"Футболки\",",
+							"        \"description\": \"Удобная футболка с коротким рукавом\",",
+							"        \"color\": \"Синий\",",
+							"        \"size\": 46,",
+							"        \"price\": 177.34,",
+							"        \"params\":\"dress\"}",
+							"  }",
+							"};",
+							"",
+							"const _dummy = setInterval(() => {}, 10000 );",
+							"function sendRequest(req) {",
+							"    return new Promise((resolve, reject) => {",
+							"        pm.sendRequest(req, function (err,res) {",
+							"            if (err) {",
+							"                console.log(err);",
+							"                return reject(err);",
+							"        }",
+							"        //console.log(res.json());",
+							"        return resolve(res);",
+							"    })",
+							"    });",
+							"}",
+							"var result;",
+							"(async function main() {",
+							"    // Создаем n-колочество товара",
+							"    for(var j = 0; j < countItem; j++){",
+							"    ",
+							"        pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 10) + 1);",
+							"        createItem.body.raw.name = 'Поло-'+pm.collectionVariables.get(\"index\");",
+							"        //console.log(createItem.body.raw.name);",
+							"        //console.log(createItem.url)",
+							"        result = await sendRequest(createItem);",
+							"        itemArr[j] = await result.json().result.id;",
+							"    ",
+							"    }",
+							"    //pm.collectionVariables.set(\"array\", itemArr);",
+							"    //console.log(itemArr);",
+							"    //console.log(pm.collectionVariables.get(\"array\"));",
+							"    clearInterval(_dummy);",
+							"})();"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"Поло-\",\n    \"color\": \"Синий\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/search/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"search",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "countItem",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		}
+	]
+}

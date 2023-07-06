@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "dc560cac-5e06-4efa-9036-2936486e11a0",
+		"name": "4_13_Checking_name_company",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Getuserfull_checking_name_company",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Проверить имя компании\", function () {",
+							"    pm.expect(jsonData.companys[0].name).to.include(\"Компания\");",
+							"});",
+							"console.log(jsonData.companys[0].name);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// user_index готовит коллекция 3_7_Users_getuserfull",
+							"pm.collectionVariables.set(\"index\", pm.globals.get(\"user_index\"));",
+							"//console.log(pm.collectionVariables.get(\"index\"));",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"user-{{index}}@mail.ru\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		}
+	]
+}

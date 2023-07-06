@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "3d7cbd92-4026-4e94-a4d9-e457a1eeb8d2",
+		"name": "7_30_Users_checking_company",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Getuserfull_are_companies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"jsonData = pm.response.json();",
+							"",
+							"if (jsonData.tasks.length !=0 ){",
+							"    pm.test(\"Дочерний элемент поля \\\"tasks\\\" содержит свойство \\\"name\\\"\", function () {",
+							"        pm.expect(jsonData.tasks[0]).to.has.property(\"name\");",
+							"    });",
+							"    pm.test(\"И у него правильный тип данных\", function () {",
+							"        pm.expect(jsonData.tasks[0].name).to.be.a(\"string\");",
+							"    });",
+							"}",
+							"if (jsonData.tasks.length !=0 ){",
+							"    pm.test(\"Дочерний элемент поля \\\"tasks\\\" содержит свойство \\\"id_task\\\"\", function () {",
+							"        pm.expect(jsonData.tasks[0]).to.has.property(\"id_task\");",
+							"    });",
+							"    pm.test(\"И у него правильный тип данных\", function () {",
+							"        pm.expect(jsonData.tasks[0].name).to.be.a(\"number\");",
+							"    });",
+							"}",
+							"",
+							"if (jsonData.companys.length !=0 ){",
+							"    pm.test(\"Дочерний элемент поля \\\"companys\\\" содержит свойство \\\"name\\\"\", function () {",
+							"        pm.expect(jsonData.companys[0]).to.has.property(\"name\");",
+							"    });",
+							"    pm.test(\"И у него правильный тип данных\", function () {",
+							"        pm.expect(jsonData.companys[0].name).to.be.a(\"string\");",
+							"    });",
+							"}",
+							"",
+							"if (jsonData.companys.length !=0 ){",
+							"    pm.test(\"Дочерний элемент поля \\\"companys\\\" содержит свойство \\\"id_company\\\"\", function () {",
+							"        pm.expect(jsonData.companys[0]).to.has.property(\"id_company\");",
+							"    });",
+							"    pm.test(\"И у него правильный тип данных\", function () {",
+							"        pm.expect(jsonData.companys[0].id_company).to.be.a(\"number\");",
+							"    });",
+							"}",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"user-{{user_index}}@mail.ru\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

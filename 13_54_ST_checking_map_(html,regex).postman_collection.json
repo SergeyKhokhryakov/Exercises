@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "dcddf2cf-407d-4999-89af-5856236a264d",
+		"name": "13_54_ST_checking_map_(html,regex)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"const $ = cheerio.load(pm.response.text());",
+							"pm.test(\"На странице существует раздел \\\"Онлайн-тренинги\\\"\", function () {",
+							"    pm.expect($(\"div#tpmod-left div.moduletable-top span\").text()).to.include(\"Онлайн-тренинги\");",
+							"});",
+							"",
+							"",
+							"//console.log($(\"div#tpmod-left div.moduletable-top span\").text());",
+							"",
+							"/*",
+							"var list = $(\"div#tpmod-left div.slick-rss-container li\");",
+							"$(list).each(function(){    ",
+							"  //console.log($(this).html()); ",
+							"  console.log($(this).text()); ",
+							"  var elementA = $(this).find('a');",
+							"  //console.log(ref);",
+							"  console.log(elementA.attr('href'));",
+							"  console.log(elementA.attr('title'));",
+							"  console.log(elementA.attr('class'));",
+							"  console.log($(this).find('div').text()); ",
+							"});",
+							"*/",
+							"// Проверим элементы списка (тренинги): структуру и наполнение (насколько это возможно с учетом того, что текст меняется)",
+							"var list = $(\"div#tpmod-left div.slick-rss-container li\");",
+							"$(list).each(function(){",
+							"    const elementA = $(this).find('a');",
+							"    var str = elementA.attr('href');",
+							"    pm.test(\"Ссылка на тренинг начинается c \\\"https://software-testing.ru/edu/3-online/\\\"\", function () {",
+							"        pm.expect(str).to.includes(\"https://software-testing.ru/edu/3-online/\");",
+							"});",
+							"    str = elementA.attr('target');",
+							"    pm.test(\"Ссылка открывается в новом окне\", function () {",
+							"            pm.expect(str).to.includes(\"_blank\");",
+							"    });",
+							"    str = elementA.attr('class');",
+							"    pm.test(\"Ссылка имеет класс slickTip\", function () {",
+							"            pm.expect(str).to.includes(\"slickTip\");",
+							"    });",
+							"    str = elementA.attr('title');",
+							"    pm.test(\"Заголовок тренинга имеет текст \\\"Начало ...\\\"\", function () {",
+							"            pm.expect(str).to.matches(/Начало:\\s[0-3]?[0-9]\\s(января|февраля|марта|апреля|мая|июня|июля|августа|сентября|октября|ноября|декабря)\\s20[0-9][0-9]/);",
+							"    });",
+							"    const elementDiv = $(this).find('div');",
+							"    var strDiv = elementDiv.text();",
+							"    pm.test(\"Тексты в элементах а и div - совпадают\", function () {",
+							"            pm.expect(str).to.eql(strDiv);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://software-testing.ru/",
+					"protocol": "https",
+					"host": [
+						"software-testing",
+						"ru"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

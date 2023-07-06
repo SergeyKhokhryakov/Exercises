@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "2fad2441-3409-4eff-90ce-14825953bfd5",
+		"name": "5_19_Testing status 230-235",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_status_230",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Пустой ответ, статус 230\", function () {",
+							"    pm.response.to.have.status(\"status code 230\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\":\"Паустовский\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_231",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найден 1 пользователь, статус 231\", function () {",
+							"    pm.response.to.have.status(\"status code 231\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем случайного пользователя",
+							"pm.collectionVariables.set(\"index\", Math.floor(Math.random() * 11));",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/doregister',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        email: 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru',",
+							"        name: 'Эдуард-'+pm.collectionVariables.get(\"index\"),",
+							"        password: '123'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"user-{{index}}@mail.ru\",\n\"partyType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_232",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдено больше 1 пользователя (но без компаний), статус 232\", function () {",
+							"    pm.response.to.have.status(\"status code 232\");",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Эдуард\",\n\"partyType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_233",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдена 1 компания, статус 233\", function () {",
+							"    pm.response.to.have.status(\"status code 233\");",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Создаем компанию со случайным наименованием",
+							"pm.collectionVariables.set(\"name_company\", 'Компания-'+pm.variables.replaceIn('{{$randomInt}}'));",
+							"",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/createcompany',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        company_name: pm.collectionVariables.get(\"name_company\"),",
+							"        company_type: 'ООО',",
+							"        company_users: ['user-'+pm.collectionVariables.get(\"index\")+'@mail.ru'],",
+							"        email_owner: 'manager@mail.ru'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"{{name_company}}\",\n\"partyType\": \"COMPANY\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_234",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдено больше 1 компании (но без пользователей), статус 234\", function () {",
+							"    pm.response.to.have.status(\"status code 234\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Ромашка\",\n\"partyType\": \"COMPANY\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MagicSearch_status_235",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"найдены как пользователи, так и компании, статус 235\", function () {",
+							"    pm.response.to.have.status(\"status code 235\");",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"Эдуард-{{index}} {{name_company}}\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "name_company",
+			"value": ""
+		}
+	]
+}

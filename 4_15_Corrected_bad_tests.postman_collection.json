@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "c4c4ad65-ebfa-4561-8eea-a44de90fb5f1",
+		"name": "4_15_Corrected_bad_tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "1. why_block",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"// вместо why_block должно быть why_block[0]",
+							"pm.test(\"Блок why_block показывает, по чему искали\", function () {",
+							"    pm.expect(jsonData.results[0].why_block[0]).to.deep.eql({",
+							"                    \"field\": \"name\",",
+							"                    \"value\": \"Ромашка\"",
+							"                });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "query",
+							"value": "Ромашка",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Красавчик — алкоголик!",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"// вместо companies должно быть companies[1]",
+							"pm.test(\"Работает в алкоголиках и тунеяндцах\", function () {",
+							"    pm.expect(jsonData.results[0].companies[1]).to.include({",
+							"                    \"name\": \"Алкоголики и тунеядцы\",",
+							"                    \"id_company\": 15",
+							"                });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/form-data"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "query",
+							"value": "test_cu_11@mail.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

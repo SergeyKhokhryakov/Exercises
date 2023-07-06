@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "3d759978-03ae-4fc6-a181-f8e4ff7466f1",
+		"name": "4_14_Users_return_null_array",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Getuserfull_checking_arrays",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"/*",
+							"if (jsonData.type == undefined){",
+							"    pm.test(\"Параметр \\\"tasks\\\" — массив\", function () {",
+							"        pm.expect(jsonData.tasks).to.be.an('array');",
+							"    });",
+							"    pm.test(\"Параметр \\\"companys\\\" — массив\", function () {",
+							"        pm.expect(jsonData.companys).to.be.an('array');",
+							"    });",
+							"} else {",
+							"    pm.test(\"Пользователь не найден\", function () {",
+							"        pm.expect(jsonData.type).to.eql('error');",
+							"    });",
+							"    console.log(jsonData.message);",
+							"}",
+							"*/",
+							"    ",
+							"    pm.test(\"Параметр \\\"tasks\\\" — массив (через property)\", function () {",
+							"        pm.expect(jsonData).to.have.property(\"tasks\").that.is.an('array');",
+							"    });",
+							"    pm.test(\"Параметр \\\"tasks\\\" — массив\", function () {",
+							"        pm.expect(jsonData.tasks).to.be.an('array');",
+							"    });",
+							"    if (jsonData.tasks.length == 0){",
+							"        pm.test(\"Параметр \\\"tasks\\\" — пустой массив\", function () {",
+							"            pm.expect(jsonData.tasks.length).to.eql(0);",
+							"        });",
+							"    } else {",
+							"        pm.test(\"Параметр \\\"tasks\\\" — не пустой массив\", function () {",
+							"            pm.expect(jsonData.tasks).to.not.eql(0);",
+							"        });",
+							"    }",
+							"    ",
+							"    pm.test(\"Параметр \\\"companys\\\" — массив (через property)\", function () {",
+							"        pm.expect(jsonData).to.have.property(\"companys\").that.is.an('array');",
+							"    });",
+							"    pm.test(\"Параметр \\\"companys\\\" — массив\", function () {",
+							"        pm.expect(jsonData.companys).that.is.an('array');",
+							"    });",
+							"    if (jsonData.companys.length == 0){",
+							"        pm.test(\"Параметр \\\"companys\\\" — пустой массив\", function () {",
+							"            pm.expect(jsonData.companys.length).to.eql(0);",
+							"        });",
+							"    } else {",
+							"        pm.test(\"Параметр \\\"companys\\\" — не пустой массив\", function () {",
+							"            pm.expect(jsonData.companys).to.not.eql(0);",
+							"        });",
+							"    }",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// user_index готовит коллекция 3_7_Users_getuserfull",
+							"pm.collectionVariables.set(\"index\", pm.globals.get(\"user_index\"));",
+							"//console.log(pm.collectionVariables.get(\"index\"));",
+							"",
+							"// Создаем случайного пользователя",
+							"const  postRequest = {",
+							"  url: 'http://users.bugred.ru/tasks/rest/doregister',",
+							"  method: 'POST',",
+							"  body: {",
+							"    mode: 'raw',",
+							"    raw: JSON.stringify({ ",
+							"        email: 'user-'+pm.collectionVariables.get(\"index\")+'@mail.ru',",
+							"        name: 'Эдуард-'+pm.collectionVariables.get(\"index\"),",
+							"        password: '123'})",
+							"  }",
+							"};",
+							"",
+							"pm.sendRequest(postRequest, function (err, response) {",
+							"    console.log(err ? err : response.json());",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"user-{{index}}@mail.ru\"\n}"
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/getuserfull",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"getuserfull"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		}
+	]
+}

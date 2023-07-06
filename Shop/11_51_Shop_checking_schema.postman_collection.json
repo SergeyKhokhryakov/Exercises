@@ -1,0 +1,192 @@
+{
+	"info": {
+		"_postman_id": "55c1f249-1eaf-43ae-a5d9-fb4f04d2e6c5",
+		"name": "11_51_Shop_checking_schema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Create_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Тело ответа содержит статус \\\"ok\\\"\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"var schema = {",
+							"    \"type\": \"object\",",
+							"    \"properties\": {",
+							"        \"method\": {\"type\": \"string\"},",
+							"        \"status\": {\"enum\": [\"ok\", \"error\"]},",
+							"        \"result\": {\"type\": \"object\"},",
+							"        \"properties\": {",
+							"            \"id\": {\"type\": \"string\"},",
+							"            \"name\": {\"type\": \"string\"},",
+							"            \"section\": {\"type\": \"string\"},",
+							"            \"description\": {\"type\": \"string\"},",
+							"            \"color\": {\"type\": \"string\"},",
+							"            \"price\": {\"type\": \"number\"},",
+							"            \"params\": {\"type\": \"string\"}",
+							"        }",
+							"    }",
+							"};",
+							"",
+							"pm.test('Schema is valid', function () {",
+							"    pm.expect(tv4.validate(jsonData, schema)).to.be.true;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Джинсы\",\n    \"section\":\"Брюки\",\n    \"description\":\"Удобная одежда для пастухов коров\",\n    \"color\":\"Черный\",\n    \"size\":48,\n    \"price\": 126.17,\n    \"params\":\"dress\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/create/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search_delete_item",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Тело ответа содержит статус \\\"ok\\\"\", function () {",
+							"    pm.expect(jsonData.status).to.eql(\"ok\");",
+							"});",
+							"",
+							"var  deleteItem = {",
+							"  url: pm.environment.get(\"urlShop\") + '/delete',",
+							"  method: 'DELETE',",
+							"  body: {",
+							"    mode: 'raw', ",
+							"    raw: { ",
+							"        \"id\": \"\"",
+							"        }",
+							"  }",
+							"};",
+							"",
+							"function sendRequest(req) {",
+							"    return new Promise((resolve, reject) => {",
+							"        pm.sendRequest(req, function (err,res) {",
+							"            if (err) {",
+							"                console.log(err);",
+							"                return reject(err);",
+							"        }",
+							"        //console.log(res.json());",
+							"        return resolve(res);",
+							"    })",
+							"    });",
+							"}",
+							"",
+							"const _dummy = setInterval(() => {}, 10000 );",
+							"",
+							"(async function main() {",
+							"    result = jsonData.result;",
+							"    // определяем имя свойства, содержащего id",
+							"    // если countItem > 10, то в ответе у свойства, содержащего id, имя - last_id",
+							"    // иначе -  id",
+							"    const nameId = Object.keys(jsonData.result[0])[0];",
+							"    const nameName = Object.keys(jsonData.result[0])[1];",
+							"    for (i = 0; i < result.length; i++){",
+							"        deleteItem.body.raw.id = result[i][nameId];",
+							"        if (jsonData.result[i][nameName].search(/Джинсы/) > -1) {",
+							"            await sendRequest(deleteItem);",
+							"        }",
+							"    }",
+							"    clearInterval(_dummy);",
+							"})();",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": \"Джинсы\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlShop}}/search/",
+					"host": [
+						"{{urlShop}}"
+					],
+					"path": [
+						"search",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "id_coll",
+			"value": ""
+		},
+		{
+			"key": "name_coll",
+			"value": ""
+		},
+		{
+			"key": "id",
+			"value": ""
+		}
+	]
+}

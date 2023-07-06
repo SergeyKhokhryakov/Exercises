@@ -1,0 +1,48 @@
+{
+	"info": {
+		"_postman_id": "780fdc8a-9f16-468f-98a7-92ef99b72fa0",
+		"name": "10_48_Get_uuid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "Checking_UUID4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Успешный запрос, код 200\", function () {",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"const jsonData = pm.response.json();",
+							"const str = jsonData.uuid;",
+							"console.log(str);",
+							"pm.test(\"ID - правильный\", function () {",
+							"            pm.expect(str).to.matches(/\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}/);",
+							"    });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://httpbin.org/uuid",
+					"protocol": "http",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"uuid"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

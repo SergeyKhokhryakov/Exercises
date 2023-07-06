@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "d2312384-e1b5-415c-a70c-733da3daf1c5",
+		"name": "7_35_MagicSearch_checking_ CIO",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24187391"
+	},
+	"item": [
+		{
+			"name": "MagicSearch_CIO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"найден(ы) пользователь(и), коды 231, 232\", function () {",
+							"    //pm.response.to.have.status(231);",
+							"    //console.log(pm.response.code);",
+							"    pm.expect(pm.response.code).to.be.within(231, 232);",
+							"});",
+							"var jsonData = pm.response.json();",
+							"var count = jsonData.foundCount;",
+							"if (count > 1) {",
+							"    var results = jsonData.results;",
+							"    results.forEach(function(value)",
+							"        {",
+							"            if (value.email.includes(\"gendir\")){",
+							"                pm.test(\"Гендиректор есть в БД\", function () {",
+							"                    pm.expect(value.email).to.includes(\"gendir\");",
+							"                });",
+							"                console.log(value.name);",
+							"            }",
+							"        });",
+							"} else {",
+							"    pm.test(\"В БД один пользователь\", function () {",
+							"        pm.expect(count).to.eql(1);",
+							"    });",
+							"    pm.test(\"Имя Гендиректора правильное\", function () {",
+							"        pm.expect(jsonData.results[0].name).to.eql(pm.collectionVariables.get(\"name\"));",
+							"    });",
+							"    pm.test(\"Почта Гендиректора правильная\", function () {",
+							"        pm.expect(jsonData.results[0].email).to.eql(pm.collectionVariables.get(\"email\"));",
+							"    });",
+							"    /*",
+							"    var str = pm.collectionVariables.get(\"birthday\");",
+							"    pm.test(\"Дата дня рождения Гендиректора правильная\", function () {",
+							"        pm.expect(jsonData.results[0].birthday).to.eql(str.replace(/(\\d{4})-(\\d{2})-(\\d{2})/,'$3\\.$2\\.$1'));",
+							"    });",
+							"    */",
+							"    pm.test(\"Номер телефона Гендиректора правильный\", function () {",
+							"        pm.expect(jsonData.results[0].phone).to.eql(pm.collectionVariables.get(\"phone\"));",
+							"    });",
+							"}",
+							"console.log(jsonData.results[0].name);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//  Инициация CIO",
+							"pm.collectionVariables.set(\"email\", \"cio@company.ru\");",
+							"pm.collectionVariables.set(\"name\", \"Лунатиков Виталий Сергеевич\");",
+							"//pm.collectionVariables.set(\"birthday\", \"01.01.1900\");",
+							"pm.collectionVariables.set(\"phone\", \"8(906)979-76-00\");",
+							"",
+							"",
+							"//  Создаем тестовые данные только на тестовом стенде",
+							"if (pm.environment.get(\"urlUser\").includes(\"http://users.bugred.ru\") == true){",
+							"    // Создаем в БД генерального директора",
+							"    const  createCIO = {",
+							"    url: 'http://users.bugred.ru/tasks/rest/createuserwithtasks',",
+							"    method: 'POST',",
+							"    body: {",
+							"        mode: 'raw',",
+							"        raw: JSON.stringify({ ",
+							"            email: pm.collectionVariables.get(\"email\"),",
+							"            name: pm.collectionVariables.get(\"name\"),",
+							"            //birthday: pm.collectionVariables.get(\"birthday\"),",
+							"            phone: pm.collectionVariables.get(\"phone\"),",
+							"            tasks: [{",
+							"                \"title\": \"Пустая задача\",",
+							"                \"description\": \"Задача - ни о чем\"",
+							"                }]",
+							"            })",
+							"    }",
+							"    };",
+							"    pm.sendRequest(createCIO, function (err, response) {",
+							"        console.log(err ? err : response.json());",
+							"});",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"query\": \"{{name}}\",\n\"partyType\": \"USER\",\n\"fullSimilarity\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/magicsearch",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"magicsearch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete_CIO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"pm.test(\"Код ответа - 200\", function () {",
+							"    //pm.response.to.have.status(231);",
+							"    //console.log(pm.response.code);",
+							"    pm.expect(pm.response.code).to.eql(200);",
+							"});",
+							"/*",
+							"var jsonData = pm.response.json();",
+							"pm.test(\"Ответ содержит строку\", function () {",
+							"    //pm.response.to.have.status(231);",
+							"    //console.log(pm.response.code);",
+							"    pm.expect(jsonData.message).to.increase(pm.collectionVariables.get(\"email\") +\" успешно удален\");",
+							"});*/"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"email\": \"{{email}}\",\n\"partyType\": \"USER\",\n\"fullSimilarity\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlUser}}/tasks/rest/deleteuser",
+					"host": [
+						"{{urlUser}}"
+					],
+					"path": [
+						"tasks",
+						"rest",
+						"deleteuser"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "index",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": "gendir@romashka.ru",
+			"type": "string"
+		},
+		{
+			"key": "name",
+			"value": "Лунатиков Олег Михайлович",
+			"type": "string"
+		},
+		{
+			"key": "phone",
+			"value": "8-906-1112233",
+			"type": "string"
+		},
+		{
+			"key": "birthday",
+			"value": "1985-09-08",
+			"type": "string"
+		}
+	]
+}
